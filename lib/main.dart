@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pedometer/pedometer.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 
 String formatDate(DateTime d) {
   return d.toString().substring(0, 19);
@@ -23,12 +24,34 @@ class _MyAppState extends State<MyApp> {
   String _status = '?';
   int _steps = 0;
   int _initialSteps = 0;
+  int _savedSteps = 0;
   bool _isCounting = true;
+  int _totalStepsToday = 0;
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
+    _loadTotalSteps();
+  }
+
+  Future<void> _loadTotalSteps() async {
+    final prefs = await SharedPreferences.getInstance();
+    final now = DateTime.now();
+    final lastSavedDate = prefs.getString('last_saved_date') ?? '';
+    if (lastSavedDate != now.toIso8601String().substring(0, 10)) {
+      await prefs.setInt('total_steps', 0);
+      await prefs.setString(
+          'last_saved_date', now.toIso8601String().substring(0, 10));
+    }
+    setState(() {
+      _totalStepsToday = prefs.getInt('total_steps') ?? 0;
+    });
+  }
+
+  Future<void> _saveTotalSteps(int steps) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('total_steps', steps);
   }
 
   void onStepCount(StepCount event) {
@@ -38,7 +61,9 @@ class _MyAppState extends State<MyApp> {
         if (_initialSteps == 0) {
           _initialSteps = event.steps;
         }
-        _steps = event.steps - _initialSteps;
+        _steps = _savedSteps + (event.steps - _initialSteps);
+        _totalStepsToday += _steps;
+        _saveTotalSteps(_totalStepsToday);
       });
     }
   }
@@ -79,6 +104,11 @@ class _MyAppState extends State<MyApp> {
 
   void toggleCounting() {
     setState(() {
+      if (_isCounting) {
+        _savedSteps = _steps; // Save the steps when stopping
+      } else {
+        _initialSteps = 0; // Reset the initial steps when resuming
+      }
       _isCounting = !_isCounting;
     });
   }
@@ -87,6 +117,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _steps = 0;
       _initialSteps = 0;
+      _savedSteps = 0;
     });
   }
 
@@ -115,6 +146,19 @@ class _MyAppState extends State<MyApp> {
                 color: Colors.white,
               ),
               const Text(
+                'Total Steps Today',
+                style: TextStyle(fontSize: 30),
+              ),
+              Text(
+                _totalStepsToday.toString(),
+                style: const TextStyle(fontSize: 30, color: Colors.blue),
+              ),
+              const Divider(
+                height: 100,
+                thickness: 0,
+                color: Colors.white,
+              ),
+              const Text(
                 'Pedestrian Status',
                 style: TextStyle(fontSize: 30),
               ),
@@ -134,7 +178,7 @@ class _MyAppState extends State<MyApp> {
                       : const TextStyle(fontSize: 20, color: Colors.red),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: toggleCounting,
                 child: Text(_isCounting ? 'Stop Counting' : 'Start Counting'),
