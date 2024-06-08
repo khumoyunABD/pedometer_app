@@ -419,9 +419,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 5,
                   ),
-                  ElevatedButton(
-                    onPressed: _showGoalDialog,
-                    child: const Text('Set Daily Goal'),
+                  Container(
+                    alignment: Alignment.center,
+                    child: ElevatedButton(
+                      onPressed: _showGoalDialog,
+                      child: const Text('Set Daily Goal'),
+                    ),
                   ),
 
                   // const Text(
@@ -470,38 +473,69 @@ class _HomeScreenState extends State<HomeScreen> {
                   //         : const TextStyle(fontSize: 20, color: Colors.red),
                   //   ),
                   // ),
-                  // const SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: toggleCounting,
                     child:
                         Text(_isCounting ? 'Stop Counting' : 'Start Counting'),
                   ),
-                  ElevatedButton(
-                    onPressed: resetSteps,
-                    child: const Text('Reset Steps'),
-                  ),
+                  //reset button
                   // ElevatedButton(
-                  //   onPressed: _showGoalDialog,
-                  //   child: const Text('Set Daily Goal'),
+                  //   onPressed: resetSteps,
+                  //   child: const Text('Reset Steps'),
                   // ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  const Text(
-                    'Daily Goal Progress',
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+
+                  // Big Icon Button at the bottom center
+                  // Align(
+                  //   alignment: Alignment.bottomCenter,
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(20.0),
+                  //     child: ElevatedButton(
+                  //       onPressed: () {
+                  //         // Handle button press
+                  //       },
+                  //       style: ElevatedButton.styleFrom(
+                  //         shape: const CircleBorder(),
+                  //         padding: const EdgeInsets.all(
+                  //             24), // Adjust the padding as needed
+                  //         backgroundColor: Colors.blue, // Background color
+                  //       ),
+                  //       child: const Icon(
+                  //         Icons.add,
+                  //         size: 50, // Adjust the icon size as needed
+                  //         color: Colors.white,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
 
                   const SizedBox(
-                    height: 50,
+                    height: 130,
                   ),
                 ],
               ),
             ),
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Handle button press
+        },
+        backgroundColor: Colors.blue,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.play_arrow),
+        // Adjust the size of the button if needed
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        height: 50,
+        shadowColor: Colors.purpleAccent,
+        shape: const CircularNotchedRectangle(),
+        //shape: const ,
+        notchMargin: 12.0,
+        child: Container(
+          height: 20.0,
         ),
       ),
     );
