@@ -241,6 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   // const Text(
                   //   'Steps Taken',
@@ -261,19 +262,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   //   'Total Steps Today',
                   //   style: TextStyle(fontSize: 30),
                   // ),
-                  const Text(
-                    'Today',
-                    style: TextStyle(fontSize: 30, color: Colors.black),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 15),
+                    child: Text(
+                      'Today',
+                      style: TextStyle(fontSize: 30, color: Colors.black),
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    _totalStepsTodayFinal.toString(),
-                    style: const TextStyle(fontSize: 30, color: Colors.black),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: Text(
+                      _totalStepsTodayFinal.toString(),
+                      style: const TextStyle(fontSize: 60, color: Colors.black),
+                    ),
                   ),
                   const SizedBox(
                     height: 5,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.only(
+                      bottom: 10,
+                      right: 15,
+                    ),
+                    child: Text(
+                        _dailyGoal == 2500 ? 'Daily average' : 'Your goal'),
                   ),
                   LinearPercentIndicator(
                     lineHeight: 30.0,
@@ -293,8 +309,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: Colors.grey,
                     progressColor: Colors.blue,
                   ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Divider(
-                    height: 100,
+                    height: 30,
                     thickness: 5,
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -314,19 +333,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Column(
                         children: [
                           Text(
-                            '$hours $minutes',
+                            '${hours}h ${minutes}m',
                             style: const TextStyle(fontSize: 20),
                           ),
                           const Text(
-                            'h m',
+                            'Min',
                             style: TextStyle(fontSize: 15),
                           ),
                         ],
@@ -350,7 +369,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: const TextStyle(fontSize: 20),
                           ),
                           const Text(
-                            'Kl',
+                            'Kcal',
                             style: TextStyle(fontSize: 15),
                           ),
                         ],
@@ -370,55 +389,88 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   const SizedBox(
-                    height: 30,
+                    height: 10,
+                  ),
+                  Divider(
+                    height: 40,
+                    thickness: 5,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const Row(
+                    children: [
+                      Icon(
+                        Icons.track_changes_outlined,
+                        size: 22,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'Set a daily goal',
+                        style: TextStyle(fontSize: 22),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
                   ),
                   const Text(
-                    'Distance Walked (km)',
-                    style: TextStyle(fontSize: 30),
+                      'Those who set specific goals are 10 times more likely to achieve their desired outcomes.'),
+                  const SizedBox(
+                    height: 5,
                   ),
-                  Text(
-                    _distanceInKm.toStringAsFixed(2),
-                    style: const TextStyle(fontSize: 30, color: Colors.blue),
+                  ElevatedButton(
+                    onPressed: _showGoalDialog,
+                    child: const Text('Set Daily Goal'),
                   ),
-                  const Divider(
-                    height: 100,
-                    thickness: 0,
-                    color: Colors.white,
-                  ),
-                  const Text(
-                    'Time Spent Walking',
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  Text(
-                    '${(_walkingDuration / 60).floor()} min ${_walkingDuration % 60} sec',
-                    style: const TextStyle(fontSize: 30, color: Colors.blue),
-                  ),
-                  const Divider(
-                    height: 100,
-                    thickness: 0,
-                    color: Colors.white,
-                  ),
-                  const Text(
-                    'Pedestrian Status',
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  Icon(
-                    _status == 'walking'
-                        ? Icons.directions_walk
-                        : _status == 'stopped'
-                            ? Icons.accessibility_new
-                            : Icons.error,
-                    size: 100,
-                  ),
-                  Center(
-                    child: Text(
-                      _status,
-                      style: _status == 'walking' || _status == 'stopped'
-                          ? const TextStyle(fontSize: 30)
-                          : const TextStyle(fontSize: 20, color: Colors.red),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
+
+                  // const Text(
+                  //   'Distance Walked (km)',
+                  //   style: TextStyle(fontSize: 30),
+                  // ),
+                  // Text(
+                  //   _distanceInKm.toStringAsFixed(2),
+                  //   style: const TextStyle(fontSize: 30, color: Colors.blue),
+                  // ),
+                  // const Divider(
+                  //   height: 100,
+                  //   thickness: 0,
+                  //   color: Colors.white,
+                  // ),
+                  // const Text(
+                  //   'Time Spent Walking',
+                  //   style: TextStyle(fontSize: 30),
+                  // ),
+                  // Text(
+                  //   '${(_walkingDuration / 60).floor()} min ${_walkingDuration % 60} sec',
+                  //   style: const TextStyle(fontSize: 30, color: Colors.blue),
+                  // ),
+                  // const Divider(
+                  //   height: 100,
+                  //   thickness: 0,
+                  //   color: Colors.white,
+                  // ),
+                  // const Text(
+                  //   'Pedestrian Status',
+                  //   style: TextStyle(fontSize: 30),
+                  // ),
+                  // Icon(
+                  //   _status == 'walking'
+                  //       ? Icons.directions_walk
+                  //       : _status == 'stopped'
+                  //           ? Icons.accessibility_new
+                  //           : Icons.error,
+                  //   size: 100,
+                  // ),
+                  // Center(
+                  //   child: Text(
+                  //     _status,
+                  //     style: _status == 'walking' || _status == 'stopped'
+                  //         ? const TextStyle(fontSize: 30)
+                  //         : const TextStyle(fontSize: 20, color: Colors.red),
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: toggleCounting,
                     child:
@@ -428,10 +480,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: resetSteps,
                     child: const Text('Reset Steps'),
                   ),
-                  ElevatedButton(
-                    onPressed: _showGoalDialog,
-                    child: const Text('Set Daily Goal'),
-                  ),
+                  // ElevatedButton(
+                  //   onPressed: _showGoalDialog,
+                  //   child: const Text('Set Daily Goal'),
+                  // ),
                   const SizedBox(
                     height: 30,
                   ),
