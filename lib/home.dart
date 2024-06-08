@@ -224,191 +224,216 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     double progress = _totalStepsTodayFinal / _dailyGoal;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        // title: const Text('Pedometer'),
-        // centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 15,
-            vertical: 20,
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // const Text(
-                //   'Steps Taken',
-                //   style: TextStyle(fontSize: 30),
-                // ),
-                // Text(
-                //   _steps == -1 ? 'Step count not available' : _steps.toString(),
-                //   style: const TextStyle(fontSize: 30, color: Colors.green),
-                // ),
-                // const Divider(
-                //   height: 100,
-                //   thickness: 0,
-                //   color: Colors.white,
-                // ),
-
-                //Total steps for the day
-                // const Text(
-                //   'Total Steps Today',
-                //   style: TextStyle(fontSize: 30),
-                // ),
-                const Text(
-                  'Today',
-                  style: TextStyle(fontSize: 30, color: Colors.black),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  _totalStepsTodayFinal.toString(),
-                  style: const TextStyle(fontSize: 30, color: Colors.black),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                LinearPercentIndicator(
-                  lineHeight: 30.0,
-                  percent: progress > 1.0
-                      ? 1.0
-                      : progress, // Ensure it doesn't exceed 100%
-                  // center: Text(
-                  //   '${(progress * 100).toStringAsFixed(1)}%',
-                  //   style: const TextStyle(fontSize: 20.0),
+      // appBar: AppBar(
+      // backgroundColor: Theme.of(context).colorScheme.surface,
+      // title: const Text('Pedometer'),
+      // centerTitle: true,
+      // ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+              vertical: 20,
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // const Text(
+                  //   'Steps Taken',
+                  //   style: TextStyle(fontSize: 30),
                   // ),
-                  center: Text(
-                    '$_totalStepsTodayFinal / $_dailyGoal',
-                    style: const TextStyle(fontSize: 20.0),
-                  ),
-                  barRadius: const Radius.circular(10),
-                  //linearStrokeCap: LinearStrokeCap.roundAll,
-                  backgroundColor: Colors.grey,
-                  progressColor: Colors.blue,
-                ),
-                Divider(
-                  height: 100,
-                  thickness: 10,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const Row(
-                  children: [
-                    Icon(
-                      Icons.directions_walk,
-                      size: 22,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      'Exercise',
-                      style: TextStyle(fontSize: 22),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text('234'),
-                    Text('432'),
-                    Column(
-                      children: [
-                        Text(
-                          _distanceInKm.toStringAsFixed(2),
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                        const Text(
-                          'Km',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                const Text(
-                  'Distance Walked (km)',
-                  style: TextStyle(fontSize: 30),
-                ),
-                Text(
-                  _distanceInKm.toStringAsFixed(2),
-                  style: const TextStyle(fontSize: 30, color: Colors.blue),
-                ),
-                const Divider(
-                  height: 100,
-                  thickness: 0,
-                  color: Colors.white,
-                ),
-                const Text(
-                  'Time Spent Walking',
-                  style: TextStyle(fontSize: 30),
-                ),
-                Text(
-                  '${(_walkingDuration / 60).floor()} min ${_walkingDuration % 60} sec',
-                  style: const TextStyle(fontSize: 30, color: Colors.blue),
-                ),
-                const Divider(
-                  height: 100,
-                  thickness: 0,
-                  color: Colors.white,
-                ),
-                const Text(
-                  'Pedestrian Status',
-                  style: TextStyle(fontSize: 30),
-                ),
-                Icon(
-                  _status == 'walking'
-                      ? Icons.directions_walk
-                      : _status == 'stopped'
-                          ? Icons.accessibility_new
-                          : Icons.error,
-                  size: 100,
-                ),
-                Center(
-                  child: Text(
-                    _status,
-                    style: _status == 'walking' || _status == 'stopped'
-                        ? const TextStyle(fontSize: 30)
-                        : const TextStyle(fontSize: 20, color: Colors.red),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: toggleCounting,
-                  child: Text(_isCounting ? 'Stop Counting' : 'Start Counting'),
-                ),
-                ElevatedButton(
-                  onPressed: resetSteps,
-                  child: const Text('Reset Steps'),
-                ),
-                ElevatedButton(
-                  onPressed: _showGoalDialog,
-                  child: const Text('Set Daily Goal'),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                const Text(
-                  'Daily Goal Progress',
-                  style: TextStyle(fontSize: 30),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
+                  // Text(
+                  //   _steps == -1 ? 'Step count not available' : _steps.toString(),
+                  //   style: const TextStyle(fontSize: 30, color: Colors.green),
+                  // ),
+                  // const Divider(
+                  //   height: 100,
+                  //   thickness: 0,
+                  //   color: Colors.white,
+                  // ),
 
-                const SizedBox(
-                  height: 50,
-                ),
-              ],
+                  //Total steps for the day
+                  // const Text(
+                  //   'Total Steps Today',
+                  //   style: TextStyle(fontSize: 30),
+                  // ),
+                  const Text(
+                    'Today',
+                    style: TextStyle(fontSize: 30, color: Colors.black),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    _totalStepsTodayFinal.toString(),
+                    style: const TextStyle(fontSize: 30, color: Colors.black),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  LinearPercentIndicator(
+                    lineHeight: 30.0,
+                    percent: progress > 1.0
+                        ? 1.0
+                        : progress, // Ensure it doesn't exceed 100%
+                    // center: Text(
+                    //   '${(progress * 100).toStringAsFixed(1)}%',
+                    //   style: const TextStyle(fontSize: 20.0),
+                    // ),
+                    center: Text(
+                      '$_totalStepsTodayFinal / $_dailyGoal',
+                      style: const TextStyle(fontSize: 20.0),
+                    ),
+                    barRadius: const Radius.circular(10),
+                    //linearStrokeCap: LinearStrokeCap.roundAll,
+                    backgroundColor: Colors.grey,
+                    progressColor: Colors.blue,
+                  ),
+                  Divider(
+                    height: 100,
+                    thickness: 10,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const Row(
+                    children: [
+                      Icon(
+                        Icons.directions_walk,
+                        size: 22,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'Exercise',
+                        style: TextStyle(fontSize: 22),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            _walkingDuration.toStringAsFixed(1),
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          const Text(
+                            'Min',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            _distanceInKm.toStringAsFixed(1),
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          const Text(
+                            'Kl',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            _distanceInKm.toStringAsFixed(2),
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          const Text(
+                            'Km',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const Text(
+                    'Distance Walked (km)',
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  Text(
+                    _distanceInKm.toStringAsFixed(2),
+                    style: const TextStyle(fontSize: 30, color: Colors.blue),
+                  ),
+                  const Divider(
+                    height: 100,
+                    thickness: 0,
+                    color: Colors.white,
+                  ),
+                  const Text(
+                    'Time Spent Walking',
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  Text(
+                    '${(_walkingDuration / 60).floor()} min ${_walkingDuration % 60} sec',
+                    style: const TextStyle(fontSize: 30, color: Colors.blue),
+                  ),
+                  const Divider(
+                    height: 100,
+                    thickness: 0,
+                    color: Colors.white,
+                  ),
+                  const Text(
+                    'Pedestrian Status',
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  Icon(
+                    _status == 'walking'
+                        ? Icons.directions_walk
+                        : _status == 'stopped'
+                            ? Icons.accessibility_new
+                            : Icons.error,
+                    size: 100,
+                  ),
+                  Center(
+                    child: Text(
+                      _status,
+                      style: _status == 'walking' || _status == 'stopped'
+                          ? const TextStyle(fontSize: 30)
+                          : const TextStyle(fontSize: 20, color: Colors.red),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: toggleCounting,
+                    child:
+                        Text(_isCounting ? 'Stop Counting' : 'Start Counting'),
+                  ),
+                  ElevatedButton(
+                    onPressed: resetSteps,
+                    child: const Text('Reset Steps'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _showGoalDialog,
+                    child: const Text('Set Daily Goal'),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const Text(
+                    'Daily Goal Progress',
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  const SizedBox(
+                    height: 50,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
