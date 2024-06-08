@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 String formatDate(DateTime d) {
   return d.toString().substring(0, 19);
@@ -36,10 +37,56 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     initPlatformState();
+    _checkPermission();
     _loadTotalSteps();
     _loadDailyGoal();
     _loadWalkingDuration();
   }
+
+  //checking permissions
+  Future<void> _checkPermission() async {
+    if (await Permission.activityRecognition.isGranted) {
+      // Permission is granted
+      //print('Permission granted');
+    } else {
+      // Permission is not granted, request permission
+      PermissionStatus status = await Permission.activityRecognition.request();
+      if (status.isDenied || status.isPermanentlyDenied) {
+        // Permission is denied or permanently denied, prompt to go to settings
+        _showSettingsDialog();
+      }
+    }
+  }
+
+  void _showSettingsDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Permission Required'),
+          content: const Text(
+              'This app requires permission to access physical activity. Please enable it in the settings.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await openAppSettings();
+              },
+              child: const Text('Go to Settings'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Future<void> openAppSettings() async {
+  //   if (await canLaunch('app-settings:')) {
+  //     await launch('app-settings:');
+  //   } else {
+  //     print('Could not open settings');
+  //   }
+  // }
 
   Future<void> _loadTotalSteps() async {
     final now = DateTime.now();
@@ -272,10 +319,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 10,
                   ),
+
                   Padding(
                     padding: const EdgeInsets.only(left: 15),
                     child: Text(
-                      _totalStepsTodayFinal.toString(),
+                      _steps == -1
+                          ? 'Not available'
+                          : _totalStepsTodayFinal.toString(),
                       style: const TextStyle(fontSize: 60, color: Colors.black),
                     ),
                   ),
@@ -296,10 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     percent: progress > 1.0
                         ? 1.0
                         : progress, // Ensure it doesn't exceed 100%
-                    // center: Text(
-                    //   '${(progress * 100).toStringAsFixed(1)}%',
-                    //   style: const TextStyle(fontSize: 20.0),
-                    // ),
+
                     center: Text(
                       '$_totalStepsTodayFinal / $_dailyGoal',
                       style: const TextStyle(fontSize: 20.0),
@@ -350,18 +397,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      // Column(
-                      //   children: [
-                      //     Text(
-                      //       minutes.toString(),
-                      //       style: const TextStyle(fontSize: 20),
-                      //     ),
-                      //     const Text(
-                      //       'Minutes',
-                      //       style: TextStyle(fontSize: 15),
-                      //     ),
-                      //   ],
-                      // ),
                       Column(
                         children: [
                           Text(
@@ -414,103 +449,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  const Text(
-                      'Those who set specific goals are 10 times more likely to achieve their desired outcomes.'),
+                  Text(
+                    'Those who set specific goals are 10 times more likely to achieve their desired outcomes.',
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
                   const SizedBox(
-                    height: 5,
+                    height: 15,
                   ),
                   Container(
                     alignment: Alignment.center,
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurple),
                       onPressed: _showGoalDialog,
-                      child: const Text('Set Daily Goal'),
+                      child: Text(
+                        'Set Daily Goal',
+                        style: TextStyle(color: Colors.grey.shade200),
+                      ),
                     ),
-                  ),
-
-                  // const Text(
-                  //   'Distance Walked (km)',
-                  //   style: TextStyle(fontSize: 30),
-                  // ),
-                  // Text(
-                  //   _distanceInKm.toStringAsFixed(2),
-                  //   style: const TextStyle(fontSize: 30, color: Colors.blue),
-                  // ),
-                  // const Divider(
-                  //   height: 100,
-                  //   thickness: 0,
-                  //   color: Colors.white,
-                  // ),
-                  // const Text(
-                  //   'Time Spent Walking',
-                  //   style: TextStyle(fontSize: 30),
-                  // ),
-                  // Text(
-                  //   '${(_walkingDuration / 60).floor()} min ${_walkingDuration % 60} sec',
-                  //   style: const TextStyle(fontSize: 30, color: Colors.blue),
-                  // ),
-                  // const Divider(
-                  //   height: 100,
-                  //   thickness: 0,
-                  //   color: Colors.white,
-                  // ),
-                  // const Text(
-                  //   'Pedestrian Status',
-                  //   style: TextStyle(fontSize: 30),
-                  // ),
-                  // Icon(
-                  //   _status == 'walking'
-                  //       ? Icons.directions_walk
-                  //       : _status == 'stopped'
-                  //           ? Icons.accessibility_new
-                  //           : Icons.error,
-                  //   size: 100,
-                  // ),
-                  // Center(
-                  //   child: Text(
-                  //     _status,
-                  //     style: _status == 'walking' || _status == 'stopped'
-                  //         ? const TextStyle(fontSize: 30)
-                  //         : const TextStyle(fontSize: 20, color: Colors.red),
-                  //   ),
-                  // ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: toggleCounting,
-                    child:
-                        Text(_isCounting ? 'Stop Counting' : 'Start Counting'),
-                  ),
-                  //reset button
-                  // ElevatedButton(
-                  //   onPressed: resetSteps,
-                  //   child: const Text('Reset Steps'),
-                  // ),
-
-                  // Big Icon Button at the bottom center
-                  // Align(
-                  //   alignment: Alignment.bottomCenter,
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.all(20.0),
-                  //     child: ElevatedButton(
-                  //       onPressed: () {
-                  //         // Handle button press
-                  //       },
-                  //       style: ElevatedButton.styleFrom(
-                  //         shape: const CircleBorder(),
-                  //         padding: const EdgeInsets.all(
-                  //             24), // Adjust the padding as needed
-                  //         backgroundColor: Colors.blue, // Background color
-                  //       ),
-                  //       child: const Icon(
-                  //         Icons.add,
-                  //         size: 50, // Adjust the icon size as needed
-                  //         color: Colors.white,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-
-                  const SizedBox(
-                    height: 130,
                   ),
                 ],
               ),
@@ -519,18 +475,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Handle button press
-        },
-        backgroundColor: Colors.blue,
+        onPressed: toggleCounting,
+        backgroundColor: Colors.deepPurple,
         shape: const CircleBorder(),
-        child: const Icon(Icons.play_arrow),
+        child: Icon(_isCounting ? Icons.pause : Icons.play_arrow),
         // Adjust the size of the button if needed
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         height: 50,
-        shadowColor: Colors.purpleAccent,
+        color: Colors.purple.shade200,
+        //shadowColor: Colors.purpleAccent,
         shape: const CircularNotchedRectangle(),
         //shape: const ,
         notchMargin: 12.0,
