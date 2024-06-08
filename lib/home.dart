@@ -326,7 +326,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: const TextStyle(fontSize: 20),
                           ),
                           const Text(
-                            'H m',
+                            'h m',
                             style: TextStyle(fontSize: 15),
                           ),
                         ],
