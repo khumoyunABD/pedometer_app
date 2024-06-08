@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:restart_app/restart_app.dart';
 
 String formatDate(DateTime d) {
   return d.toString().substring(0, 19);
@@ -47,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _checkPermission() async {
     if (await Permission.activityRecognition.isGranted) {
       // Permission is granted
-      //print('Permission granted');
+      Restart.restartApp();
     } else {
       // Permission is not granted, request permission
       PermissionStatus status = await Permission.activityRecognition.request();
