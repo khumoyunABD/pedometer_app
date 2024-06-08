@@ -223,6 +223,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     double progress = _totalStepsTodayFinal / _dailyGoal;
+    int hours = (_walkingDuration / 3600).floor();
+    int minutes = ((_walkingDuration % 3600) / 60).floor();
     return Scaffold(
       // appBar: AppBar(
       // backgroundColor: Theme.of(context).colorScheme.surface,
@@ -293,7 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Divider(
                     height: 100,
-                    thickness: 10,
+                    thickness: 5,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   const Row(
@@ -320,15 +322,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       Column(
                         children: [
                           Text(
-                            _walkingDuration.toStringAsFixed(1),
+                            '$hours $minutes',
                             style: const TextStyle(fontSize: 20),
                           ),
                           const Text(
-                            'Min',
+                            'H m',
                             style: TextStyle(fontSize: 15),
                           ),
                         ],
                       ),
+                      // Column(
+                      //   children: [
+                      //     Text(
+                      //       minutes.toString(),
+                      //       style: const TextStyle(fontSize: 20),
+                      //     ),
+                      //     const Text(
+                      //       'Minutes',
+                      //       style: TextStyle(fontSize: 15),
+                      //     ),
+                      //   ],
+                      // ),
                       Column(
                         children: [
                           Text(
