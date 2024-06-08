@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pedometer/pedometer.dart';
+import 'package:pedometer_app/theme_switcher.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:restart_app/restart_app.dart';
@@ -288,10 +289,18 @@ class _HomeScreenState extends State<HomeScreen> {
     int minutes = ((_walkingDuration % 3600) / 60).ceil();
     double caloriesBurned = _totalStepsTodayFinal * 0.04;
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       // appBar: AppBar(
       // backgroundColor: Theme.of(context).colorScheme.surface,
       // title: const Text('Pedometer'),
       // centerTitle: true,
+      // actions: [
+      // IconButton(
+      //   onPressed: () {},
+      //   icon: const Icon(Icons.dark_mode),
+      // ),
+      //ThemeSwitcher(),
+      //],
       // ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -324,11 +333,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   //   'Total Steps Today',
                   //   style: TextStyle(fontSize: 30),
                   // ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 15),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15),
                     child: Text(
                       'Today',
-                      style: TextStyle(fontSize: 30, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: 30,
+                          color: Theme.of(context).colorScheme.onSurface),
                     ),
                   ),
                   const SizedBox(
@@ -341,7 +352,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       _steps == -1
                           ? 'Not available'
                           : _totalStepsTodayFinal.toString(),
-                      style: const TextStyle(fontSize: 60, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: 60,
+                          color: Theme.of(context).colorScheme.error),
                     ),
                   ),
                   const SizedBox(
@@ -491,15 +504,19 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: toggleCounting,
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         shape: const CircleBorder(),
-        child: Icon(_isCounting ? Icons.pause : Icons.play_arrow),
+        child: Icon(
+          _isCounting ? Icons.pause : Icons.play_arrow,
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
         // Adjust the size of the button if needed
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         height: 50,
-        color: Colors.purple.shade200,
+        //color: Colors.purple.shade200,
+        color: Theme.of(context).colorScheme.outlineVariant,
         //shadowColor: Colors.purpleAccent,
         shape: const CircularNotchedRectangle(),
         //shape: const ,
