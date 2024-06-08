@@ -285,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     double progress = _totalStepsTodayFinal / _dailyGoal;
     int hours = (_walkingDuration / 3600).floor();
-    int minutes = ((_walkingDuration % 3600) / 60).floor();
+    int minutes = ((_walkingDuration % 3600) / 60).ceil();
     double caloriesBurned = _totalStepsTodayFinal * 0.04;
     return Scaffold(
       // appBar: AppBar(
