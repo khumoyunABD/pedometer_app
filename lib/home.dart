@@ -48,13 +48,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _checkPermission() async {
     if (await Permission.activityRecognition.isGranted) {
       // Permission is granted
-      Restart.restartApp();
     } else {
       // Permission is not granted, request permission
       PermissionStatus status = await Permission.activityRecognition.request();
       if (status.isDenied || status.isPermanentlyDenied) {
         // Permission is denied or permanently denied, prompt to go to settings
         _showSettingsDialog();
+      } else if (status.isGranted) {
+        // Permission is granted after request, restart the app
+        Restart.restartApp();
       }
     }
   }
@@ -71,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
             TextButton(
               onPressed: () async {
                 Navigator.of(context).pop();
-                await openAppSettings();
+                await openAppSet();
               },
               child: const Text('Go to Settings'),
             ),
@@ -79,6 +81,17 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
+  }
+
+  Future<void> openAppSet() async {
+    if (await Permission.activityRecognition.isPermanentlyDenied) {
+      openAppSettings();
+    } else {
+      await Permission.activityRecognition.request();
+      if (await Permission.activityRecognition.isGranted) {
+        Restart.restartApp();
+      }
+    }
   }
 
   // Future<void> openAppSettings() async {
@@ -273,6 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double progress = _totalStepsTodayFinal / _dailyGoal;
     int hours = (_walkingDuration / 3600).floor();
     int minutes = ((_walkingDuration % 3600) / 60).floor();
+    double caloriesBurned = _totalStepsTodayFinal * 0.04;
     return Scaffold(
       // appBar: AppBar(
       // backgroundColor: Theme.of(context).colorScheme.surface,
@@ -401,7 +415,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Column(
                         children: [
                           Text(
-                            _distanceInKm.toStringAsFixed(1),
+                            caloriesBurned.toStringAsFixed(2),
                             style: const TextStyle(fontSize: 20),
                           ),
                           const Text(
