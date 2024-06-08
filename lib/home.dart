@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pedometer/pedometer.dart';
-import 'package:pedometer_app/theme_switcher.dart';
+
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:restart_app/restart_app.dart';
@@ -95,14 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // Future<void> openAppSettings() async {
-  //   if (await canLaunch('app-settings:')) {
-  //     await launch('app-settings:');
-  //   } else {
-  //     print('Could not open settings');
-  //   }
-  // }
-
   Future<void> _loadTotalSteps() async {
     final now = DateTime.now();
     final lastSavedDate = box.read('last_saved_date') ?? '';
@@ -124,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadDailyGoal() async {
     setState(() {
-      _dailyGoal = box.read('daily_goal') ?? 2500; // Default to 10,000 steps
+      _dailyGoal = box.read('daily_goal') ?? 2500; // Default to 2500 steps
     });
   }
 
@@ -217,20 +209,20 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void resetSteps() {
-    setState(() {
-      _steps = 0;
-      _initialSteps = 0;
-      _savedSteps = 0;
-      _totalStepsToday = 0;
-      _totalStepsTodayFinal = 0;
-      _distanceInKm = 0.0;
-      _walkingDuration = 0;
-      _stopTimer();
-      _saveTotalSteps(0);
-      _saveWalkingDuration(0);
-    });
-  }
+  // void resetSteps() {
+  //   setState(() {
+  //     _steps = 0;
+  //     _initialSteps = 0;
+  //     _savedSteps = 0;
+  //     _totalStepsToday = 0;
+  //     _totalStepsTodayFinal = 0;
+  //     _distanceInKm = 0.0;
+  //     _walkingDuration = 0;
+  //     _stopTimer();
+  //     _saveTotalSteps(0);
+  //     _saveWalkingDuration(0);
+  //   });
+  // }
 
   void _startTimer() {
     if (_timer == null || !_timer!.isActive) {
@@ -299,9 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //   onPressed: () {},
       //   icon: const Icon(Icons.dark_mode),
       // ),
-      //ThemeSwitcher(),
-      //],
-      // ),
+
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -314,25 +304,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // const Text(
-                  //   'Steps Taken',
-                  //   style: TextStyle(fontSize: 30),
-                  // ),
-                  // Text(
-                  //   _steps == -1 ? 'Step count not available' : _steps.toString(),
-                  //   style: const TextStyle(fontSize: 30, color: Colors.green),
-                  // ),
-                  // const Divider(
-                  //   height: 100,
-                  //   thickness: 0,
-                  //   color: Colors.white,
-                  // ),
-
-                  //Total steps for the day
-                  // const Text(
-                  //   'Total Steps Today',
-                  //   style: TextStyle(fontSize: 30),
-                  // ),
                   Padding(
                     padding: const EdgeInsets.only(left: 15),
                     child: Text(
@@ -345,7 +316,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-
                   Padding(
                     padding: const EdgeInsets.only(left: 15),
                     child: Text(
@@ -390,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Divider(
                     height: 30,
                     thickness: 5,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                   const Row(
                     children: [
@@ -457,7 +427,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Divider(
                     height: 40,
                     thickness: 5,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                   const Row(
                     children: [
